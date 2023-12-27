@@ -51,7 +51,7 @@ class Selector implements ISelector {
     if (hasModifier) {
       const modifiersString = str.slice(0, modifierEndIndex)
       const modifierStringMatches = Array.from(
-        modifiersString.matchAll(/\[[^\]]+:[^\[]+\]|\w+/g)
+        modifiersString.matchAll(/\[[^\]]+:[^\[]+\]|\w+(-\w+)?/g)
       )
       selector.modifiers = modifierStringMatches.map(
         ([modifierString]) => new Modifier(modifierString)
@@ -66,7 +66,8 @@ class Selector implements ISelector {
     selector.prefix = prefix as IPrefix
 
     if (selectorMatch) {
-      let [match, value, variantString = ''] = selector.value.match(/^([mp])([xylrtb])/) || []
+      let [match, value, variantString = ""] =
+        selector.value.match(/^([mp])([xylrtb])/) || []
 
       if (match) {
         selector.value = value
@@ -80,11 +81,7 @@ class Selector implements ISelector {
       if (variantString) {
         selector.variant = new Variant(variantString)
       }
-
-      // l(variantString)
     }
-
-    // console.log(selectorString)
 
     return selector
   }
@@ -145,11 +142,23 @@ class Modifier implements IModifier {
       variant: undefined,
     }
 
+    const modifierMatch = str.match(/^(\[[^\]]+:[^\[]+\]|\w+)/)
+
+    if (modifierMatch) {
+      modifier.value = modifierMatch[0]
+
+      if (modifier.value !== modifierMatch.input) {
+        const variantStartIndex = modifier.value.length
+        const variantString = str.slice(variantStartIndex)
+        modifier.variant = new Variant(variantString)
+      }
+    }
+    
     return modifier
   }
 }
 
 let style = wind(
-  "dark:md:hover:-px-5 md:focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
+  "dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
 )
-l(style.selectors)
+l(style.selectors.map(({modifiers}) => modifiers))
