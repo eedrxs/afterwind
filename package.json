@@ -1,6 +1,6 @@
 {
   "name": "afterwind",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A utility package that extends Tailwind CSS' capabilities",
   "main": "dist/index.js",
   "scripts": {
