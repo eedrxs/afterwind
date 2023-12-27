@@ -1,7 +1,7 @@
 import { IModifier, IPrefix, ISelector, IVariant, IWind } from "./src/types"
 let l = console.log.bind(console)
 
-export function wind(str: string): Wind {
+export default function wind(str: string): Wind {
   return new Wind(str)
 }
 
@@ -12,6 +12,10 @@ class Wind implements IWind {
     this.selectors = this.parse(str)
   }
 
+  toString() {
+    return this.selectors.join(' ')
+  }
+
   private parse(str: string): ISelector[] {
     return str.split(" ").map((str) => new Selector(str))
   }
@@ -19,9 +23,9 @@ class Wind implements IWind {
 
 class Selector implements ISelector {
   value: string
+  prefix: IPrefix
   variant?: IVariant | undefined
   modifiers?: IModifier[] | undefined
-  prefix: IPrefix
 
   constructor(str: string) {
     const { value, variant, modifiers, prefix } = this.parse(str)
@@ -29,6 +33,17 @@ class Selector implements ISelector {
     this.variant = variant
     this.modifiers = modifiers
     this.prefix = prefix
+  }
+
+  private toString() {
+    const [value, prefix, variant, modifiers] = [
+      this.value,
+      this.prefix,
+      this.variant ? `${this.variant}` : "",
+      this.modifiers ? this.modifiers.join("") : "",
+    ]
+
+    return `${modifiers}${prefix}${value}${variant}`
   }
 
   private parse(str: string): ISelector {
@@ -101,6 +116,16 @@ class Variant implements IVariant {
     this.type = type
   }
 
+  private toString() {
+    const [prefix, value, variant] = [
+      this.prefix,
+      this.value,
+      this.variant ? `${this.variant}` : "",
+    ]
+
+    return `${prefix}${value}${variant}`
+  }
+
   private parse(str: string): IVariant {
     const variant: IVariant = {
       value: "",
@@ -136,6 +161,12 @@ class Modifier implements IModifier {
     this.variant = variant
   }
 
+  private toString() {
+    const [value, variant] = [this.value, this.variant ? `${this.variant}` : ""]
+
+    return `${value}${variant}:`
+  }
+
   private parse(str: string): IModifier {
     const modifier: IModifier = {
       value: "",
@@ -153,12 +184,13 @@ class Modifier implements IModifier {
         modifier.variant = new Variant(variantString)
       }
     }
-    
+
     return modifier
   }
 }
 
-let style = wind(
-  "dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
-)
-l(style.selectors.map(({modifiers}) => modifiers))
+// let style = wind(
+//   "dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
+// )
+// l(style.toString())
+// l(style.selectors.map(({ modifiers }) => modifiers))
