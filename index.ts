@@ -1,7 +1,7 @@
 import { IModifier, IPrefix, ISelector, IVariant, IWind } from "./src/types"
-let l = console.log.bind(console)
+// let l = console.log.bind(console)
 
-export default function wind(str: string): Wind {
+module.exports = function wind(str: string): Wind {
   return new Wind(str)
 }
 
