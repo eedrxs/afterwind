@@ -17,7 +17,7 @@ class Wind implements IWind {
   }
 
   private parse(str: string): ISelector[] {
-    return str.split(" ").map((str) => new Selector(str))
+    return str.split(/\s+/).map((str) => new Selector(str))
   }
 }
 
