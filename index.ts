@@ -1,5 +1,5 @@
 import { IModifier, IPrefix, ISelector, IVariant, IWind } from "./src/types"
-// let l = console.log.bind(console)
+let l = console.log.bind(console)
 
 export default function wind(str: string): Wind {
   return new Wind(str)
@@ -189,8 +189,13 @@ class Modifier implements IModifier {
   }
 }
 
-// let style = wind(
-//   "dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
-// )
-// l(style.toString())
+let style = wind(
+  "[@supports(display:grid)]:hover:grid [@media(any-hover:hover){&:hover}]:opacity-100 dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
+)
+l(style.selectors.map(s => s.modifiers))
 // l(style.selectors.map(({ modifiers }) => modifiers))
+
+// TODO: HANDLE NAMED GROUP/PEER e.g. group-hover/edit:text-gray-700
+// TODO: HANDLE STYLED DIRECT CHILDREN e.g. *:rounded-full
+// TODO: ADD SUPPORT FOR FORWARD SLASH PREFIX e.g bg-black/75
+// TODO: ADD MORE SUPPORT FOR ARBITRARY VARIANTS e.g [@supports(display:grid)]:grid [@media(any-hover:hover){&:hover}]:opacity-100
