@@ -1,4 +1,4 @@
-export function combinations(str: string): string[] {
+export function combinations(str: string): string[] | undefined {
   let fn = function (active: string, rest: string, a: string[]) {
     if (!active && !rest) return undefined
     if (!rest) {

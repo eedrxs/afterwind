@@ -1,24 +1,27 @@
+import { Modifier, Variant } from "../.."
+
 export interface IVariant {
   value: string
-  prefix: IPrefix
-  variant?: IVariant
+  prefix: Prefix
+  variant?: Variant
   type?: string
 }
 
 export interface IModifier {
   value: string
-  variant?: IVariant
+  variant?: Variant
 }
 
 export interface ISelector {
-  value: string
-  variant?: IVariant
-  modifiers?: IModifier[]
-  prefix: IPrefix
+  value?: string
+  variant?: Variant
+  modifiers?: Modifier[]
+  prefix: Prefix
 }
 
 export interface IWind {
   selectors: ISelector[]
 }
 
-export type IPrefix = '' | '-'
+export type Prefix = '' | '-'
+export type Precedence = 'high' | 'low'

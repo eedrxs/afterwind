@@ -21,7 +21,7 @@ export function ensureArray<T>(value: T | T[]): T[] {
 }
 
 export function flatten<T>(arrays: T[][]): T[] {
-  return [].concat.apply([], arrays)
+  return [].concat.apply([], arrays as any)
 }
 
 export function equal(a: any[], b: any[]): boolean {

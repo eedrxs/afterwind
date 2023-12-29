@@ -5,12 +5,12 @@ import dlv from 'dlv'
 export function getClassNameMeta(
   state: State,
   classNameOrParts: string | string[]
-): ClassNameMeta | ClassNameMeta[] {
+): ClassNameMeta | ClassNameMeta[] | null {
   const parts = Array.isArray(classNameOrParts)
     ? classNameOrParts
     : getClassNameParts(state, classNameOrParts)
   if (!parts) return null
-  const info = dlv(state.classNames.classNames, [...parts, '__info'])
+  const info = dlv(state.classNames!.classNames, [...parts, '__info'])
 
   if (Array.isArray(info)) {
     return info.map((i) => ({

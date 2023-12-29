@@ -2,20 +2,20 @@ import { State } from './state'
 import { combinations } from './combinations'
 import dlv from 'dlv'
 
-export function getClassNameParts(state: State, className: string): string[] {
-  let separator = state.separator
+export function getClassNameParts(state: State, className: string): string[] | null | undefined {
+  let separator = state.separator!
   className = className.replace(/^\./, '')
   let parts: string[] = className.split(separator)
 
   if (parts.length === 1) {
-    return dlv(state.classNames.classNames, [className, '__info', '__rule']) ===
+    return dlv(state.classNames!.classNames, [className, '__info', '__rule']) ===
       true ||
-      Array.isArray(dlv(state.classNames.classNames, [className, '__info']))
+      Array.isArray(dlv(state.classNames!.classNames, [className, '__info']))
       ? [className]
       : null
   }
 
-  let points = combinations('123456789'.substr(0, parts.length - 1)).map((x) =>
+  let points = combinations('123456789'.substr(0, parts.length - 1))!.map((x) =>
     x.split('').map((x) => parseInt(x, 10))
   )
 
@@ -35,8 +35,8 @@ export function getClassNameParts(state: State, className: string): string[] {
 
   return possibilities.find((key) => {
     if (
-      dlv(state.classNames.classNames, [...key, '__info', '__rule']) === true ||
-      Array.isArray(dlv(state.classNames.classNames, [...key, '__info']))
+      dlv(state.classNames!.classNames, [...key, '__info', '__rule']) === true ||
+      Array.isArray(dlv(state.classNames!.classNames, [...key, '__info']))
     ) {
       return true
     }
