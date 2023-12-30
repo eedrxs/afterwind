@@ -42,8 +42,8 @@ class Wind {
     const incomingSelectors = this.#parse(str)
 
     for (let incomingSelector of incomingSelectors) {
-      this.selectors = this.selectors.filter((selector) =>
-        !Selector.equivalent(incomingSelector, selector)
+      this.selectors = this.selectors.filter(
+        (selector) => !Selector.equivalent(incomingSelector, selector)
       )
     }
   }
@@ -111,10 +111,11 @@ export class Selector {
 
     const selectorStartIndex = hasModifier ? modifierEndIndex + 1 : 0
     const selectorString = str.slice(selectorStartIndex)
-    const [selectorMatch, prefix, value] =
+    const [selectorMatch, prefix = '', value] =
       selectorString.match(/^(-?)(\[[^\]]+:[^\[]+\]|\w+)/) || []
     selector.value = value ? value : undefined
     selector.prefix = prefix as Prefix
+    // l(selectorMatch, prefix, value)
 
     if (selectorMatch && selector.value) {
       let [match, value, variantString = ""] =
@@ -139,6 +140,7 @@ export class Selector {
 
   static equivalent(selectorA: Selector, selectorB: Selector): boolean {
     if (selectorA.value === undefined || selectorA.value === selectorB.value) {
+      // l(selectorA.modifiers?.forEach(l), selectorB.modifiers)
       return (
         Modifier.equivalent(selectorA.modifiers, selectorB.modifiers) &&
         Variant.equivalent(selectorA.variant, selectorB.variant)
@@ -205,7 +207,8 @@ export class Variant {
 
       return true
     } else {
-      if (variantA.value !== variantB.value) { // TODO: TAKE NOTE OF PREFIX --> && variantA.prefix !== variantB.prefix
+      if (variantA.value !== variantB.value) {
+        // TODO: TAKE NOTE OF PREFIX --> && variantA.prefix !== variantB.prefix
         return false
       }
 
@@ -216,7 +219,7 @@ export class Variant {
 
 export class Modifier {
   value: string
-  variant?: IVariant | undefined
+  variant?: Variant | undefined
 
   constructor(str: string) {
     const { value, variant } = this.#parse(str)
@@ -251,7 +254,44 @@ export class Modifier {
     return modifier
   }
 
-  static equivalent(modifierA?: Modifier[], modifierB?: Modifier[]): boolean {}
+  static equivalent(modifiersA?: Modifier[], modifiersB?: Modifier[]): boolean {
+    if (modifiersA === undefined || modifiersB === undefined) {
+      if (modifiersA !== undefined) {
+        return false
+      }
+
+      return true
+    }
+
+    const sequenceFirstModifier = modifiersA[0]
+    const sequenceStartIndex = modifiersB.findIndex(
+      (modifierB) =>
+        sequenceFirstModifier.value === modifierB.value &&
+        Variant.equivalent(sequenceFirstModifier.variant, modifierB.variant)
+    )
+
+    if (sequenceStartIndex === -1) {
+      return false
+    }
+
+    const sequenceEndIndex = sequenceStartIndex + modifiersA.length
+    const modifierSequence = modifiersB.slice(
+      sequenceStartIndex,
+      sequenceEndIndex
+    )
+
+    if (modifierSequence.length !== modifiersA.length) {
+      return false
+    }
+
+    const nonMatchingModifier = modifierSequence.find(
+      (sequence, index) =>
+        modifiersA[index].value !== sequence.value ||
+        !Variant.equivalent(modifiersA[index].variant, sequence.variant)
+    )
+
+    return nonMatchingModifier === undefined
+  }
 }
 
 // let style = wind(
@@ -260,8 +300,8 @@ export class Modifier {
 // l(style.selectors.map((s) => s.modifiers))
 // l(style.selectors.map(({ modifiers }) => modifiers))
 
-let style = wind("bg-red text-sm")
-style.add("text-lg")
+let style = wind("bg-red-100 text-sm text-red-100 md:text-lg")
+style.remove("md:")
 l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
@@ -270,3 +310,4 @@ l(style.toString())
 // TODO: HANDLE STYLED DIRECT CHILDREN e.g. *:rounded-full
 // TODO: ADD SUPPORT FOR FORWARD SLASH PREFIX e.g bg-black/75
 // TODO: ADD MORE SUPPORT FOR ARBITRARY VARIANTS e.g [@supports(display:grid)]:grid [@media(any-hover:hover){&:hover}]:opacity-100
+// TODO: MAKE IT POSSIBLE TO SPECIFY SELECTOR TYPES WHEN REMOVING SELECTORS e.g. remove('text{color}')
