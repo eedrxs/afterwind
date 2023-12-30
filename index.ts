@@ -1,13 +1,13 @@
 import cssConflict from "./src/util/cssConflict"
 import {
   IModifier,
-  Precedence as Precedence,
-  Prefix,
   ISelector,
   IVariant,
+  Precedence,
+  Prefix,
   IWind,
 } from "./src/types"
-let l = console.log.bind(console)
+let log = console.log.bind(console)
 
 export default function wind(str: string): Wind {
   return new Wind(str)
@@ -43,7 +43,7 @@ class Wind {
 
     for (let incomingSelector of incomingSelectors) {
       this.selectors = this.selectors.filter(
-        (selector) => !Selector.equivalent(incomingSelector, selector)
+        (selector) => !Selector.assignable(incomingSelector, selector)
       )
     }
   }
@@ -111,7 +111,7 @@ export class Selector {
 
     const selectorStartIndex = hasModifier ? modifierEndIndex + 1 : 0
     const selectorString = str.slice(selectorStartIndex)
-    const [selectorMatch, prefix = '', value] =
+    const [selectorMatch, prefix = "", value] =
       selectorString.match(/^(-?)(\[[^\]]+:[^\[]+\]|\w+)/) || []
     selector.value = value ? value : undefined
     selector.prefix = prefix as Prefix
@@ -138,17 +138,18 @@ export class Selector {
     return selector
   }
 
-  static equivalent(selectorA: Selector, selectorB: Selector): boolean {
+  static assignable(selectorA: Selector, selectorB: Selector): boolean {
     if (selectorA.value === undefined || selectorA.value === selectorB.value) {
-      // l(selectorA.modifiers?.forEach(l), selectorB.modifiers)
       return (
-        Modifier.equivalent(selectorA.modifiers, selectorB.modifiers) &&
-        Variant.equivalent(selectorA.variant, selectorB.variant)
+        Modifier.assignable(selectorA.modifiers, selectorB.modifiers) &&
+        Variant.assignable(selectorA.variant, selectorB.variant)
       )
     } else {
       return false
     }
   }
+
+  static dedupe() {}
 }
 
 export class Variant {
@@ -199,7 +200,7 @@ export class Variant {
     return variant
   }
 
-  static equivalent(variantA?: Variant, variantB?: Variant): boolean {
+  static assignable(variantA?: Variant, variantB?: Variant): boolean {
     if (variantA === undefined || variantB === undefined) {
       if (variantA !== undefined) {
         return false
@@ -212,7 +213,7 @@ export class Variant {
         return false
       }
 
-      return Variant.equivalent(variantA.variant, variantB.variant)
+      return Variant.assignable(variantA.variant, variantB.variant)
     }
   }
 }
@@ -254,7 +255,7 @@ export class Modifier {
     return modifier
   }
 
-  static equivalent(modifiersA?: Modifier[], modifiersB?: Modifier[]): boolean {
+  static assignable(modifiersA?: Modifier[], modifiersB?: Modifier[]): boolean {
     if (modifiersA === undefined || modifiersB === undefined) {
       if (modifiersA !== undefined) {
         return false
@@ -267,7 +268,7 @@ export class Modifier {
     const sequenceStartIndex = modifiersB.findIndex(
       (modifierB) =>
         sequenceFirstModifier.value === modifierB.value &&
-        Variant.equivalent(sequenceFirstModifier.variant, modifierB.variant)
+        Variant.assignable(sequenceFirstModifier.variant, modifierB.variant)
     )
 
     if (sequenceStartIndex === -1) {
@@ -287,22 +288,16 @@ export class Modifier {
     const nonMatchingModifier = modifierSequence.find(
       (sequence, index) =>
         modifiersA[index].value !== sequence.value ||
-        !Variant.equivalent(modifiersA[index].variant, sequence.variant)
+        !Variant.assignable(modifiersA[index].variant, sequence.variant)
     )
 
     return nonMatchingModifier === undefined
   }
 }
 
-// let style = wind(
-//   "[@supports(display:grid)]:hover:grid [@media(any-hover:hover){&:hover}]:opacity-100 dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
-// )
-// l(style.selectors.map((s) => s.modifiers))
-// l(style.selectors.map(({ modifiers }) => modifiers))
-
-let style = wind("bg-red-100 text-sm text-red-100 md:text-lg")
-style.remove("md:")
-l(style.toString())
+let style = wind("bg-red-100 text-sm text-red-100 hover:focus:md:text-lg")
+style.remove("text")
+log(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
 // TODO: HANDLE CASE OF SUPPLYING EMPTY STRING TO wind
@@ -311,3 +306,10 @@ l(style.toString())
 // TODO: ADD SUPPORT FOR FORWARD SLASH PREFIX e.g bg-black/75
 // TODO: ADD MORE SUPPORT FOR ARBITRARY VARIANTS e.g [@supports(display:grid)]:grid [@media(any-hover:hover){&:hover}]:opacity-100
 // TODO: MAKE IT POSSIBLE TO SPECIFY SELECTOR TYPES WHEN REMOVING SELECTORS e.g. remove('text{color}')
+
+
+// let style = wind(
+//   "[@supports(display:grid)]:hover:grid [@media(any-hover:hover){&:hover}]:opacity-100 dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
+// )
+// l(style.selectors.map((s) => s.modifiers))
+// l(style.selectors.map(({ modifiers }) => modifiers))
