@@ -22,5 +22,6 @@
   "dependencies": {
     "culori": "^0.20.1",
     "dlv": "^1.1.3"
-  }
+  },
+  "keywords": ["Tailwind CSS", "Tailwind", "CSS", "className", "class", "ngClass", "classes"]
 }

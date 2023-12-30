@@ -7,5 +7,5 @@ A utility library for writing composable Tailwind CSS. It elevates Tailwind usag
 Install with npm
 
 ```bash
-  npm i afterwind # or yarn add afterwind or pnpm pnpm add afterwind
+  npm i afterwind # or yarn add afterwind or pnpm add afterwind
 ```
