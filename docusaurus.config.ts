@@ -16,7 +16,8 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'eedrxs', // Usually your GitHub org/user name.
-  projectName: 'afterwind', // Usually your repo name.
+  projectName: 'afterwind', // Usually your repo name.,
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -42,6 +43,13 @@ const config: Config = {
             'https://github.com/eedrxs/afterwind/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: false,
+        // blog: {
+        //   showReadingTime: true,
+        //   // Please change this to your repo.
+        //   // Remove this to remove the "edit this page" links.
+        //   editUrl:
+        //     'https://github.com/eedrxs/afterwind/tree/main/packages/create-docusaurus/templates/shared/',
+        // },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -86,7 +94,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro',
+              to: '/',
             },
           ],
         },
@@ -107,17 +115,13 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
               label: 'GitHub',
               href: 'https://github.com/eedrxs/afterwind',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Idris Abdul-Lateef. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Idris Abdul-Lateef.`,
     },
     prism: {
       theme: prismThemes.github,
