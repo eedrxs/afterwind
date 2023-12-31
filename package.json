@@ -1,15 +1,30 @@
 {
   "name": "afterwind",
   "version": "0.0.7",
-  "description": "A utility package that extends Tailwind CSS' capabilities",
+  "description": "Utility library for writing composable Tailwind CSS ✨",
+  "license": "MIT",
+  "homepage": "https://afterwind.js.org",
+  "repository": "github:eedrxs/afterwind",
+  "bugs": "https://github.com/eedrxs/afterwind/issues",
+  "keywords": [
+    "Tailwind CSS",
+    "Tailwind",
+    "CSS",
+    "className",
+    "class",
+    "ngClass",
+    "classes",
+    "clsx",
+    "flowbite"
+  ],
+  "author": "Idris Abdul-Lateef <alabialade@gmail.com> (https://eedris.dev/)",
   "main": "dist/index.js",
+  "files": ["dist"],
   "scripts": {
     "build": "tsc",
     "start": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Idris Abdul-Lateef",
-  "license": "ISC",
   "devDependencies": {
     "@types/culori": "^2.0.4",
     "@types/dlv": "^1.1.4",
@@ -22,6 +37,5 @@
   "dependencies": {
     "culori": "^0.20.1",
     "dlv": "^1.1.3"
-  },
-  "keywords": ["Tailwind CSS", "Tailwind", "CSS", "className", "class", "ngClass", "classes"]
+  }
 }
