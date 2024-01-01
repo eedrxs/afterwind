@@ -2,46 +2,32 @@
 sidebar_position: 1
 slug: /
 ---
-# Tutorial Intro
+# Introduction
 
-Let's discover **Docusaurus in less than 5 minutes**.
+👋 Hello!
 
-## Getting Started
+Welcome to the official documentation for [Afterwind](https://github.com/eedrxs/afterwind).
 
-Get started by **creating a new site**.
+## What is Afterwind?
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+**Afterwind** is a utility library for writing composable Tailwind CSS. It elevates Tailwind CSS from primitive strings to something you can compose, override, extract, nest, conditionally apply, etc, without needing to resort to messy and unpleasant string manipulation.
 
-### What you'll need
+It builds on top of standard Tailwind CSS to provide a simple yet powerful model that helps you develop flexible and extensible styling for your components.
 
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+**Afterwind** is dependency-free as it requires no dependency to work. Just ship it in and you are good to go.
 
-## Generate a new site
+::: tip What You Should Know
+Basic understanding and familiarity with Tailwind CSS is a major preresquite as the documentation assumes you already know.
+:::
 
-Generate a new Docusaurus site using the **classic template**.
+Now that you know something about **Afterwind**, here is a brief definition of what it does;
 
-The classic template will automatically be added to your project after you run the command:
+- In a nutshell, it provides you with a function that allows you create `Wind` objects for manipulating classes.
 
-```bash
-npm init docusaurus@latest my-website classic
-```
+## Main Objectives
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+The primary goals of this project are:
 
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+- **Composability**: Provide a simple and intuitive API that allows developers to creating styling for components that can be composed and overridden.
+- **Flexibility**: Give developers the ability to create very flexible and dynamic components.
+- **Simplicity**: Enable developers to easily work with Tailwind CSS classes without resorting to messy string manipulation.
