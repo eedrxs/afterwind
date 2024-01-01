@@ -3,13 +3,13 @@ sidebar_position: 4
 ---
 # API Reference
 
-- [wind.add()](#term-focus)
-- [wind.remove()](#term-blur)
-- [wind.toString()](#term-pause)
+- [wind.add()](#wind-add)
+- [wind.remove()](#wind-remove)
+- [wind.toString()](#wind-toString)
 
 ---
 
-## wind.add()
+## wind.add() {#wind-add}
 
 Adds classes to a Wind instance.
 
@@ -37,7 +37,7 @@ Adds classes to a Wind instance.
 <!-- - **See also:** [Guide - Creating a Terminal](../guide/initialization.md#creating-your-first-terminal) -->
 
 
-## wind.remove()
+## wind.remove() {#wind-remove}
 
 Removes the list of classes passed to it.
 
@@ -73,7 +73,7 @@ Removes the list of classes passed to it.
 
 <!-- - **See also:** [Guide - Disposal](../guide/disposal.md) -->
 
-## wind.toString()
+## wind.toString() {#wind-toString}
 
 Convert instance to a string of classes.
 
