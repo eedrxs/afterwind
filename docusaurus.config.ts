@@ -121,7 +121,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} afterwind · Built by <a href="https://eedris.dev">Idris Abdul-Lateef</a>.`,
+      copyright: `© 2023-present afterwind · Built by <a href="https://eedris.dev">Idris Abdul-Lateef</a>.`,
     },
     prism: {
       theme: prismThemes.github,
