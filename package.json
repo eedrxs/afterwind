@@ -19,7 +19,9 @@
   ],
   "author": "Idris Abdul-Lateef <alabialade@gmail.com> (https://eedris.dev/)",
   "main": "dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "ts-node index.ts",
@@ -35,6 +37,7 @@
     "vscode-languageserver-textdocument": "^1.0.11"
   },
   "dependencies": {
+    "clsx": "^2.1.0",
     "culori": "^0.20.1",
     "dlv": "^1.1.3"
   }
