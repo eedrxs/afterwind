@@ -29,6 +29,7 @@ Returns a string of Tailwind CSS classes.
 - Add CSS conflict detection
 - Add support for nesting classes
 - Enable specifying modifiers for a group of classes
+- Add caching
 
 ## Documentation
 

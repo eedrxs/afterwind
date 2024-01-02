@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import cssConflict from "./src/util/cssConflict"
 import {
   IModifier,
@@ -7,10 +8,14 @@ import {
   Prefix,
   IWind,
 } from "./src/types"
-let log = console.log.bind(console)
 
-export default function wind(str: string): Wind {
-  return new Wind(str)
+import{twMerge} from 'tailwind-merge'
+import { overrideTailwindClasses } from 'tailwind-override'
+
+const l = console.log.bind(console)
+
+export default function wind(...str: clsx.ClassValue[]): Wind {
+  return new Wind(clsx(str))
 }
 
 class Wind {
@@ -38,8 +43,10 @@ class Wind {
     }
   }
 
-  remove(str: string) {
-    const incomingSelectors = this.#parse(str)
+  remove(...str: clsx.ClassValue[]) {
+    l(str)
+    l(clsx(str))
+    const incomingSelectors = this.#parse(clsx(str))
 
     for (let incomingSelector of incomingSelectors) {
       this.selectors = this.selectors.filter(
@@ -295,9 +302,13 @@ export class Modifier {
   }
 }
 
+// l(tailwindOrWindiCN_EFS('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
+// l(twMerge('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
+// l(overrideTailwindClasses('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
+
 let style = wind("bg-red-100 text-sm text-red-100 hover:focus:md:text-lg")
-style.remove("text")
-log(style.toString())
+style.remove(wind("text"))
+// l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
 // TODO: HANDLE CASE OF SUPPLYING EMPTY STRING TO wind
@@ -306,6 +317,7 @@ log(style.toString())
 // TODO: ADD SUPPORT FOR FORWARD SLASH PREFIX e.g bg-black/75
 // TODO: ADD MORE SUPPORT FOR ARBITRARY VARIANTS e.g [@supports(display:grid)]:grid [@media(any-hover:hover){&:hover}]:opacity-100
 // TODO: MAKE IT POSSIBLE TO SPECIFY SELECTOR TYPES WHEN REMOVING SELECTORS e.g. remove('text{color}')
+// TODO: TAKE ! MODIFIER INTO COGNINZANCE
 
 
 // let style = wind(
