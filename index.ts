@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import cssConflict from "./src/util/cssConflict"
+import cssConflict from "./src/utils/cssConflict"
 import {
   IModifier,
   ISelector,
@@ -301,10 +301,6 @@ export class Modifier {
   }
 }
 
-// l(tailwindOrWindiCN_EFS('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
-// l(twMerge('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
-// l(overrideTailwindClasses('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
-
 let style = wind("bg-red-100 text-sm text-red-100 hover:focus:md:text-lg")
 // style.remove(wind("text"))
 style.add('font-bold')
@@ -325,3 +321,7 @@ l(style.toString())
 // )
 // l(style.selectors.map((s) => s.modifiers))
 // l(style.selectors.map(({ modifiers }) => modifiers))
+
+// l(tailwindOrWindiCN_EFS('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
+// l(twMerge('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
+// l(overrideTailwindClasses('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))

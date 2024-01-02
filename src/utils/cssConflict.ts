@@ -1,4 +1,4 @@
-import * as jit from "../util/jit"
+import * as jit from "./jit"
 import { equal } from "./array"
 import { getClassNameDecls } from "./getClassNameDecls"
 import { getClassNameMeta } from "./getClassNameMeta"
