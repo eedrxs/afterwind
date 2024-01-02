@@ -9,16 +9,13 @@ import {
   IWind,
 } from "./src/types"
 
-import{twMerge} from 'tailwind-merge'
-import { overrideTailwindClasses } from 'tailwind-override'
-
 const l = console.log.bind(console)
 
 export default function wind(...str: clsx.ClassValue[]): Wind {
   return new Wind(clsx(str))
 }
 
-class Wind {
+export class Wind {
   selectors: Selector[]
 
   constructor(str: string) {
@@ -41,11 +38,11 @@ class Wind {
       }
       selectorStrings.pop()
     }
+
+    return this
   }
 
-  remove(...str: clsx.ClassValue[]) {
-    l(str)
-    l(clsx(str))
+  split(...str: clsx.ClassValue[]) {
     const incomingSelectors = this.#parse(clsx(str))
 
     for (let incomingSelector of incomingSelectors) {
@@ -53,6 +50,8 @@ class Wind {
         (selector) => !Selector.assignable(incomingSelector, selector)
       )
     }
+
+    return this
   }
 
   toString() {
@@ -307,8 +306,9 @@ export class Modifier {
 // l(overrideTailwindClasses('border border-1 border-red border-dashed text-lg md:text-2xl md:text-sm p-2 pl-3 px-4'))
 
 let style = wind("bg-red-100 text-sm text-red-100 hover:focus:md:text-lg")
-style.remove(wind("text"))
-// l(style.toString())
+// style.remove(wind("text"))
+style.add('font-bold')
+l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
 // TODO: HANDLE CASE OF SUPPLYING EMPTY STRING TO wind
