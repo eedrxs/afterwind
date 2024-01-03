@@ -20,11 +20,11 @@ export class Wind {
   selectors: Selector[]
 
   constructor(str: string) {
-    this.selectors = this.#parse(str) // TODO: DEDUPLICATE POTENTIAL DUPLICATE SELECTORS
+    this.selectors = Selector.sanitize(this.#parse(str)) // TODO: DEDUPLICATE POTENTIAL DUPLICATE SELECTORS
   }
 
   add(str: string, precedence: Precedence = "high") {
-    const incomingSelectors = this.#parse(str)
+    const incomingSelectors = Selector.sanitize(this.#parse(str))
     const selectorStrings = this.selectors.map((selector) =>
       selector.toString()
     )
@@ -111,7 +111,7 @@ export class Selector {
       const modifierStringMatches = Array.from(
         modifiersString.matchAll(/\*|\[[^\]]+:[^\[]+\]|\w+([-\/]\w+)*/g)
       )
-      
+
       selector.modifiers = modifierStringMatches.map(
         ([modifierString]) => new Modifier(modifierString)
       )
@@ -157,6 +157,10 @@ export class Selector {
   }
 
   static dedupe() {}
+
+  static sanitize(selectors: Selector[]): Selector[] {
+    return selectors.filter((selector) => selector.value)
+  }
 }
 
 export class Variant {
@@ -302,21 +306,18 @@ export class Modifier {
   }
 }
 
-let style = wind("*:rounded-full")
+let style = wind().add("bg-blue-100").remove()
 
-l(style.selectors[0].modifiers)
 l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
 // TODO: HANDLE CASE OF SUPPLYING EMPTY STRING TO wind
 // TODO: HANDLE NAMED GROUP/PEER e.g. group-hover/edit:text-gray-700 => ADD Slash CLASS TO HANDLE THIS
-// TODO: HANDLE STYLED DIRECT CHILDREN e.g. *:rounded-full
 // TODO: ADD SUPPORT FOR FORWARD SLASH PREFIX e.g bg-black/75
 // TODO: ADD MORE SUPPORT FOR ARBITRARY VARIANTS e.g [@supports(display:grid)]:grid [@media(any-hover:hover){&:hover}]:opacity-100
 // TODO: MAKE IT POSSIBLE TO SPECIFY SELECTOR TYPES WHEN REMOVING SELECTORS e.g. remove('text{color}')
 // TODO: TAKE ! MODIFIER INTO COGNINZANCE
 // TODO: ADD ArbitraryValue CLASS TO HANDLE ARBITRARY VALUES WHERE SELECTOR VALUES CAN BE THIS OR STRINGS OR UNDEFINED
-
 
 // let style = wind(
 //   "[@supports(display:grid)]:hover:grid [@media(any-hover:hover){&:hover}]:opacity-100 dark:md:group-hover:-px-5 md:peer-focus:text-[2rem] [&:nth-child(3)]:hover:underline hover:[&:nth-child(3)]:text-[length:var(--my-var)] [mask-type:luminance] hover:[mask-type:alpha] [--scroll-offset:56px] lg:[--scroll-offset:44px]"
