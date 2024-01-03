@@ -29,7 +29,18 @@ test('overridability', () => {
   const expectedStr = "p-3 px-4 pl-2 border-[#FFF] text-lg"
   const style = wind(classStr)
 
-  // expect(style.add(newClassStr).toString()).toBe(expectedStr)
+  expect(style.add(newClassStr).toString()).toBe(expectedStr)
   expect(twMerge(classStr, newClassStr)).toBe(expectedStr)
-  // expect(overrideTailwindClasses(classStr + " " + newClassStr)).toBe(expectedStr)
+  expect(overrideTailwindClasses(classStr + " " + newClassStr)).toBe(expectedStr)
+})
+
+test('reducability', () => {
+  const classStr = "p-3 px-4 border-white text-[3em]"
+  const newClassStr = "pl-2 border-[#FFF] text-lg"
+  const expectedStr = "p-3 px-4 pl-2 border-[#FFF] text-lg"
+  const style = wind(classStr)
+
+  expect(style.add(newClassStr).toString()).toBe(expectedStr)
+  expect(twMerge(classStr, newClassStr)).toBe(expectedStr)
+  expect(overrideTailwindClasses(classStr + " " + newClassStr)).toBe(expectedStr)
 })

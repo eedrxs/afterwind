@@ -17,15 +17,21 @@ export default function wind(...str: ClassValue[]): Wind {
 }
 
 export class Wind {
-  selectors: Selector[]
+  #selectors: Selector[]
+  #nestedClasses: Map<string, string>
 
   constructor(str: string) {
-    this.selectors = Selector.sanitize(this.#parse(str)) // TODO: DEDUPLICATE POTENTIAL DUPLICATE SELECTORS
+    const { selectors, nestedClasses } = this.#parse(str)
+    this.#selectors = Selector.sanitize(selectors) // TODO: DEDUPLICATE POTENTIAL DUPLICATE SELECTORS
+    this.#nestedClasses = nestedClasses
+    for (let key of nestedClasses.keys()) {
+      ;(<any>this)[key] = nestedClasses.get(key)
+    }
   }
 
   add(str: string, precedence: Precedence = "high") {
-    const incomingSelectors = Selector.sanitize(this.#parse(str))
-    const selectorStrings = this.selectors.map((selector) =>
+    const incomingSelectors = Selector.sanitize(this.#parse(str).selectors)
+    const selectorStrings = this.#selectors.map((selector) =>
       selector.toString()
     )
 
@@ -33,7 +39,7 @@ export class Wind {
       selectorStrings.push(incomingSelector.toString())
       if (!cssConflict(selectorStrings)) {
         if (precedence === "high") {
-          this.selectors.push(incomingSelector)
+          this.#selectors.push(incomingSelector)
         } else {
         }
       }
@@ -44,10 +50,10 @@ export class Wind {
   }
 
   remove(...str: ClassValue[]) {
-    const incomingSelectors = this.#parse(clsx(...str))
+    const incomingSelectors = this.#parse(clsx(...str)).selectors
 
     for (let incomingSelector of incomingSelectors) {
-      this.selectors = this.selectors.filter(
+      this.#selectors = this.#selectors.filter(
         (selector) => !Selector.assignable(incomingSelector, selector)
       )
     }
@@ -55,12 +61,40 @@ export class Wind {
     return this
   }
 
-  toString() {
-    return this.selectors.join(" ")
+  get(str: string | string[]) {
+    if (!Array.isArray(str)) {
+      if (str.startsWith("$")) {
+        return this.#nestedClasses.get(str)
+      } else {
+        const {selectors} = this.#parse(str)
+      }
+    } else {
+      for (let key of str) {
+      }
+    }
   }
 
-  #parse(str: string): Selector[] {
-    return str.split(/\s+/).map((str) => new Selector(str))
+  toString() {
+    return this.#selectors.join(" ")
+  }
+
+  #parse(str: string): {
+    selectors: Selector[]
+    nestedClasses: Map<string, string>
+  } {
+    const tokens = str.split(/\s+(?![^{]*}|[^\(]*\))/)
+    const nestedClasses = new Map()
+
+    tokens.forEach((token, index) => {
+      const [match, key, classes] = token.match(/^(\$\w+){(.*?)}$/) || []
+      if (match) {
+        nestedClasses.set(key, classes)
+        tokens.splice(index, 1)
+      }
+    })
+
+    const selectors = tokens.map((token) => new Selector(token))
+    return { selectors, nestedClasses }
   }
 }
 
@@ -305,10 +339,16 @@ export class Modifier {
     return nonMatchingModifier === undefined
   }
 }
+// ^(\$\w+){(.*?)}$
+let style = wind(
+  "text-blue-600 font-bold md:(bg-blue-100 text-lg) $icon{size-2 px-4}"
+)
 
-let style = wind().add("bg-blue-100").remove()
+let $icon = style.get("$icon")
+// l(style.$icon)
+// style.get(["$icon", "bg", "md:"])
 
-l(style.toString())
+// l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
 // TODO: HANDLE CASE OF SUPPLYING EMPTY STRING TO wind
