@@ -1,4 +1,4 @@
-import clsx from "clsx"
+import clsx from "./src/utils/clsx"
 import cssConflict from "./src/utils/cssConflict"
 import {
   IModifier,
@@ -8,11 +8,12 @@ import {
   Prefix,
   IWind,
 } from "./src/types"
+import { ClassValue } from "./src/utils/clsx/clsx"
 
 const l = console.log.bind(console)
 
-export default function wind(...str: clsx.ClassValue[]): Wind {
-  return new Wind(clsx(str))
+export default function wind(...str: ClassValue[]): Wind {
+  return new Wind(clsx(...str))
 }
 
 export class Wind {
@@ -42,8 +43,8 @@ export class Wind {
     return this
   }
 
-  split(...str: clsx.ClassValue[]) {
-    const incomingSelectors = this.#parse(clsx(str))
+  remove(...str: ClassValue[]) {
+    const incomingSelectors = this.#parse(clsx(...str))
 
     for (let incomingSelector of incomingSelectors) {
       this.selectors = this.selectors.filter(
@@ -302,8 +303,9 @@ export class Modifier {
 }
 
 let style = wind("bg-red-100 text-sm text-red-100 hover:focus:md:text-lg")
-// style.remove(wind("text"))
-style.add('font-bold')
+style.remove(wind("text"))
+// let styl = wind('text') as any
+// l(clsx([{[styl]: true}]))
 l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
