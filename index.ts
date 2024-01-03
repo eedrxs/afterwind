@@ -109,7 +109,7 @@ export class Selector {
     if (hasModifier) {
       const modifiersString = str.slice(0, modifierEndIndex)
       const modifierStringMatches = Array.from(
-        modifiersString.matchAll(/\[[^\]]+:[^\[]+\]|\w+(-\w+)?/g)
+        modifiersString.matchAll(/\[[^\]]+:[^\[]+\]|\w+([-\/]\w+)*/g)
       )
       selector.modifiers = modifierStringMatches.map(
         ([modifierString]) => new Modifier(modifierString)
@@ -302,20 +302,20 @@ export class Modifier {
   }
 }
 
-let style = wind("bg-red-100 text-sm text-red-100 hover:focus:md:text-lg")
-style.remove(wind("text"))
-// let styl = wind('text') as any
-// l(clsx([{[styl]: true}]))
+let style = wind("group-hover/edit:text-gray-700/20")
+
+// l(style.selectors[0].modifiers)
 l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
 // TODO: HANDLE CASE OF SUPPLYING EMPTY STRING TO wind
-// TODO: HANDLE NAMED GROUP/PEER e.g. group-hover/edit:text-gray-700
+// TODO: HANDLE NAMED GROUP/PEER e.g. group-hover/edit:text-gray-700 => ADD Slash CLASS TO HANDLE THIS
 // TODO: HANDLE STYLED DIRECT CHILDREN e.g. *:rounded-full
 // TODO: ADD SUPPORT FOR FORWARD SLASH PREFIX e.g bg-black/75
 // TODO: ADD MORE SUPPORT FOR ARBITRARY VARIANTS e.g [@supports(display:grid)]:grid [@media(any-hover:hover){&:hover}]:opacity-100
 // TODO: MAKE IT POSSIBLE TO SPECIFY SELECTOR TYPES WHEN REMOVING SELECTORS e.g. remove('text{color}')
 // TODO: TAKE ! MODIFIER INTO COGNINZANCE
+// TODO: ADD ArbitraryValue CLASS TO HANDLE ARBITRARY VALUES WHERE SELECTOR VALUES CAN BE THIS OR STRINGS OR UNDEFINED
 
 
 // let style = wind(
