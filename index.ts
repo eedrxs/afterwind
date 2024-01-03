@@ -109,8 +109,9 @@ export class Selector {
     if (hasModifier) {
       const modifiersString = str.slice(0, modifierEndIndex)
       const modifierStringMatches = Array.from(
-        modifiersString.matchAll(/\[[^\]]+:[^\[]+\]|\w+([-\/]\w+)*/g)
+        modifiersString.matchAll(/\*|\[[^\]]+:[^\[]+\]|\w+([-\/]\w+)*/g)
       )
+      
       selector.modifiers = modifierStringMatches.map(
         ([modifierString]) => new Modifier(modifierString)
       )
@@ -122,7 +123,6 @@ export class Selector {
       selectorString.match(/^(-?)(\[[^\]]+:[^\[]+\]|\w+)/) || []
     selector.value = value ? value : undefined
     selector.prefix = prefix as Prefix
-    // l(selectorMatch, prefix, value)
 
     if (selectorMatch && selector.value) {
       let [match, value, variantString = ""] =
@@ -247,7 +247,7 @@ export class Modifier {
       variant: undefined,
     }
 
-    const modifierMatch = str.match(/^(\[[^\]]+:[^\[]+\]|\w+)/)
+    const modifierMatch = str.match(/^\*|(\[[^\]]+:[^\[]+\]|\w+)/)
 
     if (modifierMatch) {
       modifier.value = modifierMatch[0]
@@ -302,9 +302,9 @@ export class Modifier {
   }
 }
 
-let style = wind("group-hover/edit:text-gray-700/20")
+let style = wind("*:rounded-full")
 
-// l(style.selectors[0].modifiers)
+l(style.selectors[0].modifiers)
 l(style.toString())
 
 // TODO: FIX TYPINGS e.g. ISelector vs Selector, etc
